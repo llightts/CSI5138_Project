@@ -35,6 +35,12 @@ This version of the head includes a reference to the RoBERTa model. This means t
 #### [RoBERTa_WiC_Testing_FullyFrozen.ipynb](RoBERTa_WiC_Testing_FullyFrozen.ipynb)
 This copy of [RoBERTa_WiC_baseline.ipynb](RoBERTa_WiC_baseline.ipynb) includes a version of the WiC head without a reference to the RoBERTa model. Instead, we need to pass the RoBERTa model to the *forward* function. This allows us to completely freeze the latter's weights. We experimentally found this method does not yield good results.
 
+#### [RoBERTa_WiC_baseline_analysis.ipynb](RoBERTa_WiC_baseline_analysis.ipynb)
+Another copy of [RoBERTa_WiC_baseline.ipynb](RoBERTa_WiC_baseline.ipynb) which incudes the code used to gather and analyze the results when testing the model's performance on the WiC task. These are informal additions that should be incorporated into the original file in the future. The paired t-test has been informally performed locally, so this would also be formally merged to the original in the future as a simple function.
+
+#### [Alpha values experimentation.xlsx](Alpha values experimentation.xlsx)
+The results from all formal testing performed for this project. This contains POS and Masked LM aspects that are no longer discussed due to insignificant results from the experimentation.
+
 ### Reprocessed datasets
 We may upload our processed versions of the SemCor and SenseEval datasets. If they are not present, note that the functions to do that processing are part of the [SeparateLoss_Pos_Senses notebook](SeparateLoss_Pos_Senses.ipynb).
 
