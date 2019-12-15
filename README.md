@@ -1,6 +1,7 @@
 # CSI 5138 Project - WiC SuperGlue Task with Sense Fine-Tuning
 **By: Simon Fortier-Garceau, Julian Templeton and William Larocque**
-As part of the course CSI5138F: Intro to DL and RL by Pr. Yongyi Mao
+
+As part of the course CSI5138F: Intro to DL and RL by Pr. Yongyi Mao at the University of Ottawa.
 ## Description
 ### Task
 This repo contains the Python 3 Jupyter Notebooks and the datasets used to compete in the [SuperGlue](https://super.gluebenchmark.com/) [WiC task](https://pilehvar.github.io/wic/). The goal of this research project is to compare a Baseline RoBERTa base model against a RoBERTa base model that has been fine-tuned with a Sense-disambiguation head. Both the Baseline and the Sense fine-tuned models also contain a WiC head which is trained on the WiC training set. By improving upon the Baseline's Contextual Word Embeddings through fine-tuning we will exhibit that the computationally feasible fine-tuning approach to modifying a BERT-based model's Contextual Word Embeddings is an effective method of achieving high, state-of-the-art results. Compared to the sense pre-training task implemented in SenseBERT, this sense fine-tuning task is more efficient and provides the behaviour that we hypothesize will occur.
@@ -18,6 +19,21 @@ This repo contains the Python 3 Jupyter Notebooks and the datasets used to compe
 
 ## Files
 ### Google Colab Notebooks
+#### [SeperateLoss_Pos_Senses.ipynb](SeparateLoss_Pos_Senses.ipynb)
+This is the notebook used to preprocess the SemCor and SenseEval datasets as well as fine-tuned the RoBERTa_base model on the Sense differentiation task. We use Cross-Entropy Loss for the Sense task in this file.
+
+To perform this, we create a special head to go from the RoBERTa embeddings size (768) to the sense vocabulary size (31). Note that the training method still uses the Masked LM task and a POS recognition task. However, we found that they did not help the final results. As such, we set the alpha hyperparameter for both theses models to 0.0, set the POS head to None and set the alpha value for sense to 1.0. We then trained for a varying number of epochs (up to 5). We obtained the best results after 2 epochs.
+
+#### [CombinedLoss_Pos_Senses.ipynb](CombinedLoss_Pos_Senses.ipynb)
+A copy of [SeperateLoss_Pos_Senses.ipynb](SeparateLoss_Pos_Senses.ipynb) that uses the same loss funtion as Masked LM for the Sense differentiation and POS recognition tasks.
+
+#### [RoBERTa_WiC_baseline.ipynb](RoBERTa_WiC_baseline.ipynb)
+In this file, we load the WiC dataset. We then create a custom head to go from the embeddings (768 dimensions) to 2. The input for this custom head is the difference of the embeddings for both versions of the target words. We use matrix multiplication to extract the embeddings of the target words from the RoBERTa sentence embedding.
+
+This version of the head includes a reference to the RoBERTa model. This means that when we train the it, the RoBERTa embeddings are fine-tuned on the WiC task. We found this to be the best approach.
+
+#### [RoBERTa_WiC_Testing_FullyFrozen.ipynb](RoBERTa_WiC_Testing_FullyFrozen.ipynb)
+This copy of [RoBERTa_WiC_baseline.ipynb](RoBERTa_WiC_baseline.ipynb) includes a version of the WiC head without a reference to the RoBERTa model. Instead, we need to pass the RoBERTa model to the *forward* function. This allows us to completely freeze the latter's weights. We experimentally found this method does not yield good results.
 
 ### Reprocessed datasets
 We may upload our processed versions of the SemCor and SenseEval datasets. If they are not present, note that the functions to do that processing are part of the [SeparateLoss_Pos_Senses notebook](SeparateLoss_Pos_Senses.ipynb).
